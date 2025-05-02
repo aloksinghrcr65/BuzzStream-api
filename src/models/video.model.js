@@ -30,13 +30,6 @@ const videoSchema = new Schema({
         type: Boolean,
         default: true
     },
-    url : {
-        type: String
-    },
-    uploaded_at: {
-        type: Date,
-        default: Date.now
-    },    
     owner : {
         type: Schema.Types.ObjectId,
         ref: 'User'
