@@ -42,7 +42,19 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    refreshToken: {
+    refreshToken: {  // long duration to live, accessToken => short duration to live.
+      // By using access token we can access data where need authorization and authenticated.
+      // Suppose if you want to upload file on server then all are not authenticated,
+      // so who are login and authenticated to perform this action. 
+      // suppose if the access token is expired in 15 minutes, so from their refresh token
+      // comes into the picture.
+      // It is used to refreshing the expired accesstoken based on refresh token.
+      // we can save that refresh token in db and also give it to user and we can validate
+      // by using access token but all time we don't need to enter password for login
+      // If you have refresh token then give one end point and hit that and the refresh token
+      // which is have by me and the refresh token which saved in db and when both are same,
+      // then the new access token is generated.
+
       type: String,
     },
   },
@@ -59,7 +71,7 @@ userSchema.pre("save", async function (next) {
 });
 
 // Method to match entered password with hashed password
-userSchema.methods.isPasswordCorrect = async function (enteredPassword) {
+userSchema.methods.isPasswordCorrect = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
